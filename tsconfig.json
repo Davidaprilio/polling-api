@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "strict":true, 
+    "strictPropertyInitialization": false, 
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "hono/jsx",
+    "types": ["bun-types"],
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["./src/*"],
+    },
+  },
+}
