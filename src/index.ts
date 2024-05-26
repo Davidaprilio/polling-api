@@ -1,9 +1,7 @@
 import ENV from '@/misc/env'
 import app from '@/server'
 import {getRuntimeKey} from 'hono/adapter'
-import { initAllDS } from '@/repositories/database'
 import { redisClient } from '@/repositories/redis'
-import { rootPath } from './misc/utils'
 
 async function main() {
     let runtime: string 
@@ -16,14 +14,6 @@ async function main() {
             break;
     }
     console.log("Running with", runtime);
-
-    try {
-        await initAllDS()
-    } catch (error) {
-        console.error("Error during Data Source initialization")
-        console.error(error);
-        return process.exit(1)
-    }
 
     try {
         await redisClient.connect()

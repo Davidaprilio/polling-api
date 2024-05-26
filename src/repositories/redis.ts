@@ -10,7 +10,7 @@ export const redisClient = createClient(redisOption);
 async function remmember(key: string, ttl: number, value: () => Promise<string>): Promise<string>
 async function remmember(key: string, ttl: number, value: () => Promise<number>): Promise<number>
 async function remmember<T>(key: string, ttl: number, value: () => Promise<T>, as: new () => T): Promise<T>
-async function remmember<T>(key: string, ttl: number, value: () => Promise<T>, as: {}): Promise<object|null>
+async function remmember<T>(key: string, ttl: number, value: () => Promise<T>, as: {}): Promise<T>
 async function remmember<T>(key: string, ttl: number, value: () => Promise<T>, as?: any): Promise<any> {
     let val = await redisClient.get(key) as (T|string|null)
     if (val === null) {
@@ -32,6 +32,9 @@ async function remmember<T>(key: string, ttl: number, value: () => Promise<T>, a
 
         if (as) {
             val = JSON.parse(val as string) as T
+            // check 'as' object is not class
+            if (as.prototype === undefined) return val
+
             // make json object reflectable by prototype / rebuild to object class
             val = Object.create(as.prototype, Object.getOwnPropertyDescriptors(val)) as T
         }

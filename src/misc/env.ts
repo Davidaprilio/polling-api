@@ -7,7 +7,7 @@ const ENV = {
     APP_HOST: env('APP_HOST', 'http://localhost'),
     APP_ENV, // development, production
     APP_DEBUG: env('APP_DEBUG', false),
-    IS_PROD: process.env.NODE_ENV === 'production',
+    IS_PROD: APP_ENV === 'production',
 
     JWT_SECRET: env('JWT_SECRET', 'secret-key'),
     JWT_ALGORITHM: env('JWT_ALGORITHM', 'HS256') as JWTAlgorithm, // https://hono.dev/helpers/jwt#supported-algorithmtypes

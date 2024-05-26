@@ -1,21 +1,46 @@
-import { AppDS } from "@/repositories/database"
-import { User } from "@/entity/User"
+import { DB } from "@/repositories/database"
 import Cache from "@/repositories/redis"
+import { User, users } from "@/db/schema/users"
 import { IUserRepo } from "./interfaces"
-import { EntityManager, Repository } from "typeorm"
+import Repository from "./Repository"
+import { eq } from "drizzle-orm"
 
 
 export class UserRepository extends Repository<User> implements IUserRepo {
-    constructor(manager: EntityManager) {
-        super(User, manager)
+    protected table = users
+
+    constructor(
+        readonly db: DB
+    ) {
+        super()
     }
     
     async findById(userId: number) {
         const user = await Cache.remmember(`user:id.${userId}`, 120, async () => {
-            return await this.findOneBy({id: userId})
-        }, User)
+            return await this.findByOne({
+                id: userId
+            })
+        }, {})
+
         return user
     }
-}
 
-export const UserRepo = new UserRepository(AppDS.manager)
+    async findByUsername(username: string) {
+        return await this.findByOne({
+            username
+        })
+    }
+
+    async findByEmail(email: string) {
+        return await this.findByOne({
+            email
+        })
+    }
+
+    async updatePassword(userId: number, password: string): Promise<boolean> {
+        const res = await this.db.update(users).set({
+            password
+        }).where(eq(users.id, userId))
+        return res[0].affectedRows === 1
+    }
+}

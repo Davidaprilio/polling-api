@@ -7,7 +7,7 @@ import { HTTPException } from 'hono/http-exception'
 import ClientError from '@/misc/errors/ClientError'
 import { DIContainer } from '@/misc/di-container'
 import { UserRepository } from '@/repositories/UserRepo'
-import { AppDS } from '@/repositories/database'
+import { AppDS, createNewDBConn } from '@/repositories/database'
 import UserService from '@/services/user'
 import EmailService from '@/services/mail'
 import userRoute from '@/controllers/http/api/user'
@@ -34,8 +34,12 @@ const transporter = createTransport({
     }
 }) 
 
+
+
+
+const {db} = createNewDBConn('default')
 // prepare dependency injection
-const userRepo = new UserRepository(AppDS.manager)
+const userRepo = new UserRepository(db)
 const mailService = new EmailService(transporter)
 const userService = new UserService(userRepo, mailService)
 

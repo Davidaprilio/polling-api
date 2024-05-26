@@ -4,7 +4,7 @@ import { getUnitValue, makeJwtToken, randomStr } from "@/misc/utils";
 import { IUserRepo } from "@/repositories/interfaces";
 import { Credentials } from "@/types/app";
 import { AppJWTPayload } from "@/types/jwt";
-import moment = require("moment");
+import moment from "moment";
 import { IEmailService } from "./interfaces";
 
 export default class UserService {
@@ -14,14 +14,12 @@ export default class UserService {
     ) {}
 
     async signIn(credentials: Credentials) {
-        const user = await this.userRepo.findOneBy({ 
-            username: credentials.username
-        })
+        const user = await this.userRepo.findByUsername(credentials.username)
 
         const errorReason = 'username or password invalid'
         if (user === null) 
             throw new UnauthorizedError('User Not Found', {message: errorReason})
-        if (!Bun.password.verifySync(credentials.password, user.password)) 
+        if (!Bun.password.verifySync(credentials.password, user.password, 'bcrypt')) 
             throw new UnauthorizedError('Password Invalid', {message: errorReason})
 
         const expJwt = getUnitValue(ENV.JWT_EXPIRES)
@@ -42,13 +40,12 @@ export default class UserService {
 
 
     async forgotPassword(email: string) {
-        const user = await this.userRepo.findOneByOrFail({
-            email
-        })
+        const user = await this.userRepo.findByEmail(email)
+        if (user === null) return 
 
         const newPassword = randomStr(8, 'alphaNumericSymbol')
-        user.password = Bun.password.hashSync(newPassword)
-        await user.save()
+        user.password = Bun.password.hashSync(newPassword, 'bcrypt')
+        this.userRepo.updatePassword(user.id, user.password)
 
         this.emailService.sendForgotPassword([email], {
             name: user.name,

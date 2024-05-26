@@ -1,5 +1,4 @@
 import { AppJWTPayload } from '@/types/jwt';
-import { env as bunEnv } from 'bun';
 import { sign, verify } from 'hono/jwt';
 import ENV from '@/misc/env';
 import * as _ from 'lodash';
@@ -10,7 +9,7 @@ export function env(key: string, defaultValue: string): string
 export function env(key: string, defaultValue: number): number
 export function env(key: string, defaultValue: boolean): boolean
 export function env(key: string, defaultValue: any): any {
-    let envV = bunEnv[key] ?? defaultValue ?? null
+    let envV = process.env[key] ?? defaultValue ?? null
     switch (typeof defaultValue) {
         case 'number': return Number(envV);
         case 'string': return String(envV);
@@ -24,7 +23,7 @@ export function env(key: string, defaultValue: any): any {
  * use at before server start
  */
 export function requiredEnv(key: string, safe: boolean = false): boolean|never {
-    const val = bunEnv[key] ?? undefined
+    const val = process.env[key] ?? undefined
     if (val === undefined) {
         if (safe) return false
         throw new Error(`Environment variable ${key} is required`)

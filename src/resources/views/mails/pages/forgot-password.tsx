@@ -15,7 +15,7 @@ export default function ForgotPasswordMailPage({name, password}: ForgotPasswordP
             </p>
 
             <div className='mt-5 max-w-screen-sm bg-blue-400 text-center mx-auto text-2xl p-6 w-fit rounded my-7'>
-                <strong className='text-white font-bold'>{'password'}</strong>
+                <strong className='text-white font-bold'>{password}</strong>
             </div>
 
             <p>If you did not request a password reset, please ignore this email. Thanks You</p>

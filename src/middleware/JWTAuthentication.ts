@@ -1,7 +1,6 @@
-import { User } from '@/entity/User';
+import { User } from '@/db/schema/users';
 import HttpStatusCodes from '@/misc/HttpStatusCodes';
 import { verifyJwtToken } from '@/misc/utils';
-import { UserRepo } from '@/repositories/UserRepo';
 import { AppJWTPayload } from '@/types/jwt';
 import { createMiddleware } from 'hono/factory'
 import { HTTPException } from 'hono/http-exception';
@@ -31,7 +30,7 @@ const JWTAuthentication = createMiddleware<{
     const payload = await verifyJwtToken(jwtToken)
     c.set('payload', payload)
 
-    const user = await UserRepo.findById(payload.sub)
+    const user = await c.var.diContainer.reg.userRepo.findById(payload.sub)
     if (user === null) {
         throw new HTTPException(HttpStatusCodes.UNAUTHORIZED, {
             res: c.json({
