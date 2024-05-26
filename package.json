@@ -1,6 +1,11 @@
 {
   "scripts": {
-    "dev": "bun run --hot src/index.ts"
+    "dev": "bun run --hot src/index.ts",
+    "vite:dev": "vite",
+    "vite:build": "vite build",
+    "preview": "bun run src/index.ts",
+    "serve": "NODE_ENV=production bun run src/index.ts",
+    "migration:create": "bunx typeorm migration:create"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.2.1",
@@ -20,6 +25,11 @@
     "@types/bun": "^1.1.2",
     "@types/lodash": "^4.17.4",
     "@types/node": "^20.12.12",
-    "@types/nodemailer": "^6.4.15"
+    "@types/nodemailer": "^6.4.15",
+    "@vitejs/plugin-react": "^4.3.0",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.3",
+    "vite": "^5.2.11"
   }
 }

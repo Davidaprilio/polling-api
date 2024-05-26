@@ -14,6 +14,8 @@ const options: DataSourceOptions = {
     // url: ENV.DB_URL,
     logging: ENV.DB_LOG,
     entities: [ User ],
+    migrations: [],
+    migrationsTableName: "custom_migration_table",
 }
 
 export const AppDS = new DataSource(options)

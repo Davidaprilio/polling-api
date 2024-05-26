@@ -3,6 +3,7 @@ import app from '@/server'
 import {getRuntimeKey} from 'hono/adapter'
 import { initAllDS } from '@/repositories/database'
 import { redisClient } from '@/repositories/redis'
+import { rootPath } from './misc/utils'
 
 async function main() {
     let runtime: string 

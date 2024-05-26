@@ -1,9 +1,13 @@
 {
   "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
     "strict":true, 
+    "esModuleInterop": true,
     "strictPropertyInitialization": false, 
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "moduleResolution": "Bundler",
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx",
     "types": ["bun-types"],

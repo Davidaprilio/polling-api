@@ -1,11 +1,13 @@
 import { env } from "@/misc/utils"
 import { JWTAlgorithm, JWTAlgorithmList } from "@/types/jwt"
 
+const APP_ENV = env('APP_ENV', 'development') // development, production
 const ENV = {
     APP_PORT: env('APP_PORT', 3000),
     APP_HOST: env('APP_HOST', 'http://localhost'),
-    APP_ENV: env('APP_ENV', 'development'), // development, production
+    APP_ENV, // development, production
     APP_DEBUG: env('APP_DEBUG', false),
+    IS_PROD: process.env.NODE_ENV === 'production',
 
     JWT_SECRET: env('JWT_SECRET', 'secret-key'),
     JWT_ALGORITHM: env('JWT_ALGORITHM', 'HS256') as JWTAlgorithm, // https://hono.dev/helpers/jwt#supported-algorithmtypes
@@ -23,6 +25,7 @@ const ENV = {
 
     REDIS_URL: env('REDIS_URL', 'redis://localhost:6379'),
 }
+process.env.NODE_ENV = ENV.APP_ENV
 
 if (!JWTAlgorithmList.includes(ENV.JWT_ALGORITHM)) {
     throw new Error("Unsupported .env JWT_ALGORITHM=" + ENV.JWT_ALGORITHM + ", choose supported Algorithms:\n" + JWTAlgorithmList.join(', '))

@@ -4,6 +4,7 @@ import { sign, verify } from 'hono/jwt';
 import ENV from '@/misc/env';
 import * as _ from 'lodash';
 import { randomInt } from 'crypto';
+import path from 'path';
 
 export function env(key: string, defaultValue: string): string
 export function env(key: string, defaultValue: number): number
@@ -93,4 +94,17 @@ export function randomStr(length: number, variant: strVariant = 'alphaNumeric') 
         str += characterSet[variant][randomInt(lengthChars)]
     }
     return str
+}
+
+export function rootPath(paths: string) {
+    paths = paths.replace(/\/$/, '')
+
+    return path.join(process.cwd(), paths)
+}
+
+export function url(path: string) {
+    if (path.startsWith('/')) {
+        path = path.replace(/\/$/, '')
+    }
+    return `${ENV.APP_HOST}:${ENV.APP_PORT}/${path}`
 }

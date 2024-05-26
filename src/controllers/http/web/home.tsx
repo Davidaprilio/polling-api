@@ -1,24 +1,15 @@
-import MainApp from "@/resources/views/mails/layouts/main";
+import buildRawHTML from "@/resources/views/html";
+import ForgotPasswordMailPage from "@/resources/views/mails/pages/forgot-password";
 import { Hono } from "hono";
+import { jsx } from "hono/jsx";
 
 const homeRoute = new Hono()
 
 homeRoute.get('/', (c) => {
     const data = ['a', 'b', 'c']
+    const content = jsx(ForgotPasswordMailPage, { hello: 'world', data })
     return c.html(
-        <div>
-            <h1>Hello Word</h1>
-            <ul>
-                {data.map(a => (
-                    <li>{a}</li>
-                ))}
-
-            </ul>
-
-            <MainApp  hello="Test" data={[
-                'A', 'B', 'C'
-            ]}/>
-        </div>
+      buildRawHTML(content)
     )
 })
 

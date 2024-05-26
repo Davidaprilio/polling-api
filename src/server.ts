@@ -1,4 +1,5 @@
 import { Hono } from 'hono'
+import { serveStatic } from 'hono/bun'
 import { createTransport } from 'nodemailer'
 import HttpStatusCodes from '@/misc/HttpStatusCodes'
 import { JwtTokenExpired, JwtTokenInvalid, JwtTokenIssuedAt, JwtTokenNotBefore, JwtTokenSignatureMismatched } from 'hono/utils/jwt/types'
@@ -67,6 +68,7 @@ for (const honoRoute of registerRoutes) {
 // print routes
 // console.log(app.routes.map(r => `[${r.method}] ${r.path}`).join('\n'));
 
+app.get('/*', serveStatic({ root: './public' }))
 
 // Error Handling
 app.notFound((c) => c.json({ 
