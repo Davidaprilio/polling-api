@@ -1,6 +1,6 @@
 import { DB } from "@/repositories/database"
 import Cache from "@/repositories/redis"
-import { User, users } from "@/db/schema/users"
+import { NewUser, User, users } from "@/db/schema/users"
 import { IUserRepo } from "./interfaces"
 import Repository from "./Repository"
 import { eq } from "drizzle-orm"
@@ -42,5 +42,10 @@ export class UserRepository extends Repository<User> implements IUserRepo {
             password
         }).where(eq(users.id, userId))
         return res[0].affectedRows === 1
+    }
+
+    async createUser(user: NewUser): Promise<User> {
+        const newUser = await this.db.insert(users).values(user)
+        return newUser
     }
 }
